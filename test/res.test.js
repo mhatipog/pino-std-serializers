@@ -167,6 +167,15 @@ test('whatwgResSerializer headers are serialized correctly', () => {
   assert.strictEqual(serialized.headers['x-custom-header'], 'custom-value')
 })
 
+test('whatwgResSerializer preserves __proto__ headers', () => {
+  const res = new Response('OK', {
+    headers: [['__proto__', 'response-value']]
+  })
+  const serialized = serializers.whatwgResSerializer(res)
+  assert.strictEqual(Object.hasOwn(serialized.headers, '__proto__'), true)
+  assert.strictEqual(serialized.headers['__proto__'], 'response-value')
+})
+
 test('nodeResSerializer is exported', async (t) => {
   const p = tspl(t, { plan: 1 })
 
